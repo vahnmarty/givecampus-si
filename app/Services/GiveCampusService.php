@@ -4,11 +4,14 @@ namespace App\Services;
 
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class GiveCampusService
 {
     private string $apiUrl;
     private string $apiKey;
+    private int $startDate;
+    private int $endDate;
 
     public function __construct()
     {
@@ -26,14 +29,42 @@ class GiveCampusService
         return $this->apiKey;
     }
 
+    public function setStartDate(int $startDate): void
+    {
+        $this->startDate = $startDate;
+    }
+
+    public function setEndDate(int $endDate): void
+    {
+        $this->endDate = $endDate;
+    }
+
     public function getGifts()
     {
         $url = $this->apiUrl . '/gifts';
 
+        $params = [
+            'start' => $this->startDate,
+            'end' => $this->endDate,
+            'time_field' => 'updated_at',
+            'authorized' => 'true',
+            'charged_back' => 'true',
+            'disputed' => 'true',
+            'failed' => 'true',
+            'paid' => 'true',
+            'pending' => 'true',
+            'pending_authorization' => 'true',
+            'refunded' => 'true',
+        ];
+
         $api =  Http::withHeaders([
             'Authorization' => 'Bearer ' . $this->apiKey,
             'Accept' => 'application/json',
-        ])->get($url);
+            ])->get($url, $params);
+
+        $fullUrl = $url . '?' . http_build_query($params);
+
+        Log::info("GiveCampus API Request URL: {$fullUrl}");
 
         return $api->json();
     }
@@ -47,23 +78,10 @@ class GiveCampusService
             'Accept' => 'application/json',
         ])->get($url);
 
-        $json =  $api->json();
+        return $api->json();
 
-        if($json['status'] === 'completed') {
-
-            $download_url = $json['download_url'];
-
-            if($download_url) {
-                $data = $this->getDownloadUrl($download_url);
-
-                return $data;
-            }
-
-
-        }
-
-        return $json;
     }
+
 
     public function getDownloadUrl(string $url)
     {
