@@ -39,7 +39,7 @@ class GiveCampusService
         $this->endDate = $endDate;
     }
 
-    public function getGifts()
+    public function getGifts(): Response
     {
         $url = $this->apiUrl . '/gifts';
 
@@ -66,10 +66,10 @@ class GiveCampusService
 
         Log::info("GiveCampus API Request URL: {$fullUrl}");
 
-        return $api->json();
+        return $api;
     }
 
-    public function getRequest(string $request_id)
+    public function getRequest(string $request_id) : Response
     {
         $url = $this->apiUrl . '/results/' . $request_id;
 
@@ -78,15 +78,37 @@ class GiveCampusService
             'Accept' => 'application/json',
         ])->get($url);
 
-        return $api->json();
+        return $api;
 
     }
 
 
-    public function getDownloadUrl(string $url)
+    public function getDownloadUrl(string $url) : Response
     {
-        $api = Http::get($url);
+        return Http::get($url);
+    }
 
-        return $api->json();
+    public function fetchGifts(): void
+    {
+        $gifts_api = $this->getGifts()->json();
+        $request_id = $gifts_api['request_id'];
+
+        $request = $this->getRequest($request_id)->json();
+
+        if($request['status'] !== 'completed') {
+            Log::error("GiveCampus API request not completed. Status: {$request['status']}");
+            return;
+        }
+
+        $data = $this->getDownloadUrl($request['download_url'])->json();
+
+        foreach ($data as $gift) {
+
+        }
+    }
+
+    public function syncToDatabase(): void
+    {
+        $api = $this->getGifts();
     }
 }
