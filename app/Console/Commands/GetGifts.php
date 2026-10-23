@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 #[Signature('givecampus:gifts')]
 #[Description('/gifts API')]
@@ -29,9 +30,12 @@ class GetGifts extends Command
         // Initiate the gifts request.
         $response = $givecampus->getGifts();
 
+
+
         $requestId = $response['request_id'] ?? null;
 
         if (! $requestId) {
+            Log::error("API Error", $response->json());
             $this->fail('Failed to start the gifts request.');
         }
 

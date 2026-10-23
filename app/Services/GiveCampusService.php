@@ -48,13 +48,7 @@ class GiveCampusService
             'end' => $this->endDate,
             'time_field' => 'updated_at',
             'authorized' => 'true',
-            'charged_back' => 'true',
-            'disputed' => 'true',
-            'failed' => 'true',
             'paid' => 'true',
-            'pending' => 'true',
-            'pending_authorization' => 'true',
-            'refunded' => 'true',
         ];
 
         $api =  Http::withHeaders([
@@ -65,6 +59,33 @@ class GiveCampusService
         $fullUrl = $url . '?' . http_build_query($params);
 
         Log::info("GiveCampus API Request URL: {$fullUrl}");
+
+        return $api;
+    }
+
+    public function getParams(): array
+    {
+        $params = [
+            'start' => $this->startDate,
+            'end' => $this->endDate,
+            'time_field' => 'updated_at',
+            'authorized' => 'true',
+            'paid' => 'true',
+        ];
+
+        return $params;
+    }
+
+    public function getPaidGifts(): Response
+    {
+        $url = $this->apiUrl . '/gifts';
+
+        $params = $this->getParams();
+
+        $api =  Http::withHeaders([
+            'Authorization' => 'Bearer ' . $this->apiKey,
+            'Accept' => 'application/json',
+            ])->get($url, $params);
 
         return $api;
     }

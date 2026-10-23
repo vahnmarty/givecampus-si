@@ -3,6 +3,45 @@
 
     {{ $this->content }}
 
+    <x-filament::modal id="generate-request" width="3xl">
+        <x-slot name="heading">
+            Generate GiveCampus Request
+        </x-slot>
+        <div>
+            <form wire:submit.prevent="generateRequestId">
+                {{  $this->generateRequestForm }}
+
+                <div class="flex justify-center mt-8">
+                    <x-filament::button type="submit">Generate</x-filament::button>
+                </div>
+                @if ($api_request_id)
+                <div class="mt-8">
+                    <div class="border-dashed bg-neutral-500/10 p-4 rounded-md border-2 border-neutral-300">
+                        <p>Request ID:</p>
+                        <code class="font-bold text-2xl" id="api_request_id">{{ $api_request_id }}</code>
+                    </div>
+                </div>
+
+                <div class="flex justify-center mt-8">
+                    <x-filament::button
+                        type="button"
+                        icon="heroicon-o-clipboard"
+                        x-on:click="
+                            navigator.clipboard.writeText(
+                                document.getElementById('api_request_id').textContent.trim()
+                            ).then(() => {
+                                $tooltip('Copied!', { timeout: 2000 })
+                            })
+                        "
+                    >
+                        Copy Request ID
+                    </x-filament::button>
+                </div>
+            @endif
+            </form>
+        </div>
+    </x-filament::modal>
+
     <x-filament::modal id="givecampus" width="5xl">
         <x-slot name="heading">
             Fetch GiveCampus

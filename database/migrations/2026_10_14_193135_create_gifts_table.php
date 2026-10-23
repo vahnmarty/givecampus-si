@@ -15,6 +15,10 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('givecampus_id')->unique();
             $table->uuid('request_id')->nullable()->index();
+            $table->string('sf_opportunity_id')->nullable();
+            $table->string('sf_account_id')->nullable();
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
             $table->string('payer_name')->nullable();
             $table->string('payer_email')->nullable();
             $table->string('paid_name')->nullable();
@@ -35,9 +39,11 @@ return new class extends Migration
             $table->string('project_name')->nullable();
             $table->timestamp('gift_created_at')->nullable()->index();
             $table->timestamp('gift_updated_at')->nullable()->index();
+            $table->timestamp('captured_at')->nullable()->index();
             $table->timestamp('checkout_at')->nullable();
             $table->json('payload')->nullable();
-            $table->timestamp('synced_at')->nullable();
+            $table->timestamp('imported_at')->nullable();
+            $table->timestamp('date_exported_to_salesforce')->nullable();
             $table->timestamps();
         });
     }

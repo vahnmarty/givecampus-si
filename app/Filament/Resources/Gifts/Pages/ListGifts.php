@@ -8,12 +8,22 @@ use Carbon\Carbon;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\TextInput;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Concerns\InteractsWithSchemas;
+use Filament\Schemas\Concerns\RestrictsFileUploadsToSchemaComponents;
+use Filament\Schemas\Contracts\HasSchemas;
+use Filament\Schemas\Schema;
+use Override;
 use Throwable;
 
-class ListGifts extends ListRecords
+class ListGifts extends ListRecords implements HasSchemas
 {
+    use InteractsWithSchemas;
+    use RestrictsFileUploadsToSchemaComponents;
+
     protected static string $resource = GiftResource::class;
 
     protected string $view = 'filament.resources.gifts.list-gifts';
@@ -30,32 +40,26 @@ class ListGifts extends ListRecords
 
     public ?string $sync_error = null;
 
+    public ?array $requestData = [];
+
+    public $api_request_id;
+
+    #[Override]
+    public function mount(): void
+    {
+        parent::mount();
+
+        $this->generateRequestForm->fill();
+    }
+
     protected function getHeaderActions(): array
     {
         return [
             Action::make('generate_request')
                 ->label('Generate Gifts Request')
                 ->modalSubmitActionLabel('Generate')
-                ->schema([
-                    DateTimePicker::make('start_date')
-                        ->label('Start Date')
-                        ->required()
-                        ->default(now()->subDays(30)),
-
-                    DateTimePicker::make('end_date')
-                        ->label('End Date')
-                        ->required()
-                        ->default(now()),
-                ])
-                ->action(function (array $data): void {
-                    $this->start_date = Carbon::parse(
-                        $data['start_date']
-                    )->unix();
-
-                    $this->end_date = Carbon::parse(
-                        $data['end_date']
-                    )->unix();
-
+                ->action(function (): void {
+                    $this->dispatch('open-modal', id: 'generate-request');
                 }),
             Action::make('generate_result')
                 ->label('Generate Result')
@@ -251,10 +255,10 @@ class ListGifts extends ListRecords
                     $gift->project_id = $gift_api['project']['id'] ?? null;
                     $gift->project_type = $gift_api['project']['type'] ?? null;
                     $gift->project_name = $gift_api['project']['name'] ?? null;
-                    $gift->gift_created_at = isset($gift_api['created_at']) ? Carbon::parse($gift_api['created_at']) : null;
-                    $gift->gift_updated_at = isset($gift_api['updated_at']) ? Carbon::parse($gift_api['updated_at']) : null;
+                    $gift->gift_created_at = isset($gift_api['timestamps']['created_at']) ? Carbon::parse($gift_api['timestamps']['created_at']) : null;
+                    $gift->gift_updated_at = isset($gift_api['timestamps']['updated_at']) ? Carbon::parse($gift_api['timestamps']['updated_at']) : null;
                     $gift->payload = $gift_api;
-                    $gift->synced_at = now();
+                    $gift->imported_at = now();
                     $gift->save();
                 } catch (\Throwable $th) {
                     throw $th;
@@ -271,5 +275,39 @@ class ListGifts extends ListRecords
 
         $this->dispatch('close-modal', id: 'givecampus');
 
+    }
+
+    public function generateRequestForm(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                DateTimePicker::make('start_date')
+                    ->label('Start Date')
+                    ->required()
+                    ->default(now()->subDays(30)),
+
+                DateTimePicker::make('end_date')
+                    ->label('End Date')
+                    ->required()
+                    ->default(now()),
+            ])
+            ->statePath('requestData');
+    }
+
+    public function generateRequestId()
+    {
+        $data = $this->generateRequestForm->getState();
+
+        $start_date = Carbon::parse($data['start_date'])->unix();
+        $end_date = Carbon::parse($data['end_date'])->unix();
+
+        $gc = app(GiveCampusService::class);
+        $gc->setStartDate($start_date);
+        $gc->setEndDate($end_date);
+
+        $api = $gc->getGifts();
+        $result = $api->json();
+
+        $this->api_request_id = $result['request_id'];
     }
 }
