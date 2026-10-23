@@ -15,7 +15,9 @@ class GiftsTable
     {
         return $table
             ->columns([
-
+                TextColumn::make('sf_opportunity_id')
+                    ->label("Salesforce ID")
+                    ->placeholder('Not synced'),
                 TextColumn::make('project_name')
                     ->label("Campaign")
                     ->searchable(),

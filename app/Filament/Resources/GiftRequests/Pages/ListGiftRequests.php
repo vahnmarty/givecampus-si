@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Filament\Resources\GivecampusRequests\Pages;
+namespace App\Filament\Resources\GiftRequests\Pages;
 
-use App\Filament\Resources\GivecampusRequests\GivecampusRequestResource;
+use App\Filament\Resources\GiftRequests\GiftRequestResource;
 use App\Services\GiveCampusService;
+use Carbon\Carbon;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
 
-class ListGivecampusRequests extends ListRecords
+class ListGiftRequests extends ListRecords
 {
-    protected static string $resource = GivecampusRequestResource::class;
+    protected static string $resource = GiftRequestResource::class;
 
     protected function getHeaderActions(): array
     {

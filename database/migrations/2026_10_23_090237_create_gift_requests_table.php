@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('givecampus_requests', function (Blueprint $table) {
+        Schema::create('gift_requests', function (Blueprint $table) {
             $table->id();
             $table->json('payload');
             $table->string('status')->nullable();
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('givecampus_requests');
+        Schema::dropIfExists('gift_requests');
     }
 };

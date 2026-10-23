@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\GivecampusRequests\Schemas;
+namespace App\Filament\Resources\GiftRequests\Schemas;
 
-use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
-class GivecampusRequestForm
+class GiftRequestForm
 {
+
     public static function configure(Schema $schema): Schema
     {
         $bools = ['true' => 'True', 'false' => 'False', null => 'null'];
