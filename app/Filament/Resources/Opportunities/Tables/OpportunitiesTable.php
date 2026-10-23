@@ -15,7 +15,7 @@ class OpportunitiesTable
     {
         return $table
             ->columns([
-                TextColumn::make('salesforce_id')
+                TextColumn::make('sf_opportunity_id')
                     ->searchable(),
                 TextColumn::make('name')
                     ->wrap()

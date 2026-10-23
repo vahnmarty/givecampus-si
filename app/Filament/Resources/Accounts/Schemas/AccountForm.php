@@ -11,7 +11,7 @@ class AccountForm
     {
         return $schema
             ->components([
-                TextInput::make('salesforce_id')
+                TextInput::make('sf_account_id')
                     ->required(),
                 TextInput::make('name')
                     ->required(),

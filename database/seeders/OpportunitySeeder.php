@@ -20,11 +20,11 @@ class OpportunitySeeder extends Seeder
         $records = $data['records'];
 
         foreach ($records as $json) {
-             $opModel = Opportunity::where('salesforce_id', $json['Id'])->first();
+             $opModel = Opportunity::where('sf_opportunity_id', $json['Id'])->first();
 
             if (! $opModel) {
                 $opModel = new Opportunity();
-                $opModel->salesforce_id = $json['Id'];
+                $opModel->sf_opportunity_id = $json['Id'];
                 $opModel->name = $json['Name'];
                 $opModel->amount = $json['Amount'];
                 $opModel->stage_name = $json['StageName'] ?? null;

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('opportunities', function (Blueprint $table) {
             $table->id();
-            $table->string('salesforce_id');
+            $table->string('sf_opportunity_id');
             $table->string('name');
             $table->float('amount')->default(0);
             $table->string('stage_name')->nullable();

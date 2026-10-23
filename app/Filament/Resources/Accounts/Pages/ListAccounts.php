@@ -31,12 +31,12 @@ class ListAccounts extends ListRecords
 
                     foreach($data['records'] as $item)
                     {
-                        $account = Account::where('salesforce_id', $item['Id'])->first();
+                        $account = Account::where('sf_account_id', $item['Id'])->first();
 
                         if(!$account)
                         {
                             $account = new Account;
-                            $account->salesforce_id = $item['Id'];
+                            $account->sf_account_id = $item['Id'];
                             $account->name = $item['Name'];
                             $account->save();
 

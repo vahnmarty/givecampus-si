@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
-            $table->string('salesforce_id');
+            $table->string('sf_account_id');
             $table->string('name');
             $table->timestamps();
         });

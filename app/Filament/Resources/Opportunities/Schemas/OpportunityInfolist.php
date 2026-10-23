@@ -11,7 +11,7 @@ class OpportunityInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('salesforce_id'),
+                TextEntry::make('sf_opportunity_id'),
                 TextEntry::make('name'),
                 TextEntry::make('amount')
                     ->numeric(),

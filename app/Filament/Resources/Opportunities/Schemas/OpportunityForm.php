@@ -12,7 +12,7 @@ class OpportunityForm
     {
         return $schema
             ->components([
-                TextInput::make('salesforce_id')
+                TextInput::make('sf_opportunity_id')
                     ->required(),
                 TextInput::make('name')
                     ->required(),

@@ -14,7 +14,7 @@ class AccountsTable
     {
         return $table
             ->columns([
-                TextColumn::make('salesforce_id')
+                TextColumn::make('sf_account_id')
                     ->searchable(),
                 TextColumn::make('name')
                     ->searchable(),
