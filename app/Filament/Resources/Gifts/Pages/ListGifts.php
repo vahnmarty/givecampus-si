@@ -24,4 +24,11 @@ class ListGifts extends ListRecords
 
     protected static string $resource = GiftResource::class;
 
+    protected function getHeaderActions(): array
+    {
+        return [
+
+        ];
+    }
+
 }
