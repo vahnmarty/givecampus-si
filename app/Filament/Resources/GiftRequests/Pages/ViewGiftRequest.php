@@ -77,6 +77,8 @@ class ViewGiftRequest extends ViewRecord
                                 $gift = new Gift;
                                 $gift->givecampus_id = $item['id'];
                                 $gift->request_id = $record->request_id;
+                                $gift->first_name = $item['custom_fields']['first_name'] ?? null;
+                                $gift->last_name = $item['custom_fields']['last_name'] ?? null;
                                 $gift->payer_name = $item['payer_name'] ?? null;
                                 $gift->payer_email = $item['payer_email'] ?? null;
                                 $gift->paid_name = $item['paid_name'] ?? null;

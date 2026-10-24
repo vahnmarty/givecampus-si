@@ -15,6 +15,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class OpportunityResource extends Resource
 {
@@ -23,6 +24,8 @@ class OpportunityResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-globe-americas';
 
     protected static ?string $recordTitleAttribute = 'name';
+
+    protected static string | UnitEnum | null $navigationGroup = 'Salesforce';
 
     public static function form(Schema $schema): Schema
     {

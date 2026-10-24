@@ -93,7 +93,7 @@ class SalesforceService
 
     public function getContacts(): Response
     {
-        $url = $this->apiUrl . '/services/data/v68.0/queryAll/?q=SELECT+Id,FirstName,LastName+FROM+Contact';
+        $url = $this->apiUrl . '/services/data/v68.0/queryAll/?q=SELECT+Id,AccountId,Name,Salutation,FirstName,MiddleName,LastName,Phone,Email+FROM+Contact';
 
         $api = Http::withHeaders([
             'Authorization' => 'Bearer ' . $this->apiKey,

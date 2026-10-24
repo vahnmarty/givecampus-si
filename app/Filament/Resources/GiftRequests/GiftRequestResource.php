@@ -15,6 +15,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class GiftRequestResource extends Resource
 {
@@ -23,6 +24,8 @@ class GiftRequestResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-bolt';
 
     protected static ?string $recordTitleAttribute = 'request_id';
+
+    protected static string | UnitEnum | null $navigationGroup = 'GiveCampus';
 
     public static function form(Schema $schema): Schema
     {
