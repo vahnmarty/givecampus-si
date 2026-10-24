@@ -29,7 +29,7 @@ class SalesforceService
 
     public function createToken()
     {
-        $url = $this->apiUrl . '/services/data/v68.0/queryAll/?q=SELECT+Id,Name,Amount,StageName,CloseDate+FROM+Opportunity';
+        $url = $this->apiUrl . '/services/oauth2/token';
 
         $params = [
             'grant_type' => config('services.salesforce.grant_type'),
