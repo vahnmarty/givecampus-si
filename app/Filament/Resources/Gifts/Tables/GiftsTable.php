@@ -86,6 +86,9 @@ class GiftsTable
             ->toolbarActions([
                 BulkActionGroup::make([
                     BulkAction::make('match_selected')
+                        ->label('Cross-check')
+                        ->icon('heroicon-o-bolt')
+                        ->modalDescription('This will cross check gifts record to in-app records.')
                         ->requiresConfirmation()
                         ->action(function (Collection $records){
 

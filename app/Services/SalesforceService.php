@@ -4,7 +4,6 @@ namespace App\Services;
 
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class SalesforceService
 {
@@ -32,8 +31,8 @@ class SalesforceService
         $url = $this->apiUrl . '/services/oauth2/token';
 
         $params = [
-            'grant_type' => config('services.salesforce.grant_type'),
-            'client_id' => config('services.salesforce.client_id'),
+            'grant_type'    => config('services.salesforce.grant_type'),
+            'client_id'     => config('services.salesforce.client_id'),
             'client_secret' => config('services.salesforce.client_secret')
         ];
 
